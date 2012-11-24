@@ -3,7 +3,7 @@
     
     <string name="app_name">AWS</string>
 	<string name="app_desc">android web server</string>
-	<string name="app_title">Aws</string>
+	<string name="app_title">AWS</string>
 	<string name="app_info"><b>Android Web Server</b> </string>
 	<string name="start_caption">Start Server</string>
 	<string name="service_started">Service Started</string>
