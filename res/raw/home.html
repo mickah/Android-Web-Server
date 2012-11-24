@@ -1,14 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
-<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
   <meta http-equiv="content-type" content="text/html; charset=iso-8859-1" />
 	<meta charset="utf-8">
-  <title>home</title>
+  <title>CAWS</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="">
   <meta name="author" content="">
-	<link href="../assets/css/bootstrap-responsive.css" rel="stylesheet">
+	<link href="../../assets/css/bootstrap.css" rel="stylesheet">
+	<link href="../../assets/css/bootstrap-responsive.css" rel="stylesheet">
 
     <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
     <!--[if lt IE 9]>
@@ -18,17 +18,27 @@
 </head>
 
 <body onload="startChatUpdate()">
-<h1 >lCWS (android web server)</h1>
+<div class="container-fluid">
+	<div class="page-header">
+		<h2>CAWS <small>Chat on android web server</small> </h2>
+	</div>
+	
+	<p></p>
 
-<p></p>
-
-<textarea id="msgViewer" rows="10" cols="40" readonly="readonly"></textarea>
-<p></p>
-<textarea id="msgToSend" rows="2" cols="40" maxlength="200"></textarea>
-<p>
-	<button onclick="request(null,'chat',sendNewChatMessage())">Send message</button>
- 	as <textarea id="author" rows="1" cols="20" maxlength="20">Plop</textarea> 
-</p>
+	<textarea id="msgViewer" rows="10" readonly="readonly" style="resize:none"></textarea>
+	<p></p>
+	<textarea id="msgToSend" rows="1" maxlength="200" style="resize:none"></textarea>
+	<p></p>
+	<p>
+		<form class="form-inline">
+			<button class="btn btn-primary" type="button" onclick="request(null,'chat',sendNewChatMessage())">Send message</button>
+			<div class="input-prepend">
+				<span class="add-on">as</span>
+				<input class="span1" id="author" type="text" placeholder="Username" maxlength="20">
+			</div>
+		</form>
+	</p>
+</div>
 
 <script type="text/javascript">
 <!-- 
@@ -96,5 +106,6 @@ function startChatUpdate(){
 }
 //-->
 </script>
+<!-- 	<script src="../assets/js/bootstrap.js"></script> -->
 </body>
 </html>
