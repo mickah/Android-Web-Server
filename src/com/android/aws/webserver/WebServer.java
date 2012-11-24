@@ -31,6 +31,7 @@ public class WebServer extends Thread {
 	private static final String CHAT_PATTERN = "/chat*";
 	private static final String MESSAGE_PATTERN = "/message*";
 	private static final String FOLDER_PATTERN = "/dir*";
+	private static final String ASSETS_PATTERN = "/assets*";
 	
 	private boolean isRunning = false;
 	private Context context = null;
@@ -70,6 +71,7 @@ public class WebServer extends Thread {
         registry.register(MESSAGE_PATTERN, new MessageCommandHandler(context, notifyManager));
         registry.register(FOLDER_PATTERN, new FolderCommandHandler(context, serverPort));
         registry.register(CHAT_PATTERN, new ChatHandler(context));
+        registry.register(ASSETS_PATTERN, new AssetsHandler(context));
         
         httpService.setHandlerResolver(registry);
 	}
