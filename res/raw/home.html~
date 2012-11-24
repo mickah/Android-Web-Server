@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+      "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=iso-8859-1" />
+  <title>home</title>
+  <meta name="generator" content="Amaya, see http://www.w3.org/Amaya/" />
+  <style type="text/css" title="Amaya theme">
+		/* TODO */
+		textarea {
+		  vertical-align: top;
+		}
+  </style>
+</head>
+
+<body onload="startChatUpdate()">
+<h1 >lCWS (android web server)</h1>
+
+<p></p>
+
+<textarea id="msgViewer" rows="10" cols="40" readonly="readonly"></textarea>
+<p></p>
+<textarea id="msgToSend" rows="2" cols="40" maxlength="200"></textarea>
+<p>
+	<button onclick="request(null,'chat',sendNewChatMessage())">Send message</button>
+ 	as <textarea id="author" rows="1" cols="20" maxlength="20"></textarea> 
+</p>
+
+<script type="text/javascript">
+<!-- 
+CHAT_VIEWER = "msgViewer"
+CHAT_WRITER = "msgToSend"
+CHAT_AUTHOR = "author"
+
+function getXMLHttpRequest() {
+	var xhr = null;
+
+	if (window.XMLHttpRequest || window.ActiveXObject) {
+		if (window.ActiveXObject) {
+			try {
+				xhr = new ActiveXObject("Msxml2.XMLHTTP");
+			} catch(e) {
+				xhr = new ActiveXObject("Microsoft.XMLHTTP");
+			}
+		} else {
+			xhr = new XMLHttpRequest(); 
+		}
+	} else {
+		alert("Your browser doesn't support the XMLHTTPRequest object...");
+		return null;
+	}
+	return xhr;
+}
+
+// Send a POST request whose URI is "uri" and body contains "messageToSend". 
+//The result of the request is proceed by the "callback" function
+function request(callback, uri, messageToSend) {
+	var xhr = getXMLHttpRequest();
+	xhr.onreadystatechange = function() {
+		if (xhr.readyState == 4 && (xhr.status == 200 || xhr.status == 0)) {
+			if(callback != null)			
+				callback(xhr.responseText);
+		}
+	};
+	xhr.open("POST", uri, true);
+	xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+	xhr.send(JSON.stringify(messageToSend));
+}
+
+function sendNewChatMessage() {
+	var xhr = getXMLHttpRequest();
+	var msg = document.getElementById(CHAT_WRITER).value;
+	document.getElementById(CHAT_WRITER).value = "";
+	return { message:msg, command:"newMessage", 
+					author:document.getElementById(CHAT_AUTHOR).value }
+}
+
+function waitingChatUpdateCommand( _lastMsgId){
+	return { command:"waitingUpdate", lastMsgId:_lastMsgId }
+}
+
+// loop to update the chat viewer
+function updateChatViewer(oData) {
+	var parsedData = JSON.parse(oData);
+	document.getElementById(CHAT_VIEWER).value += parsedData.updateContent;
+	document.getElementById(CHAT_VIEWER).scrollTop = 99999;
+	request(updateChatViewer,"chat",waitingChatUpdateCommand(parsedData.msgId));
+}
+
+function startChatUpdate(){
+		request(updateChatViewer,"chat",waitingChatUpdateCommand(-1));
+}
+//-->
+</script>
+</body>
+</html>
