@@ -7,8 +7,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="">
   <meta name="author" content="">
-	<link href="../../assets/css/bootstrap.css" rel="stylesheet">
-	<link href="../../assets/css/bootstrap-responsive.css" rel="stylesheet">
+	<link href="../../assets/css/bootstrap.min.css" rel="stylesheet">
+	<link href="../../assets/css/bootstrap-responsive.min.css" rel="stylesheet">
 
     <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
     <!--[if lt IE 9]>
@@ -17,29 +17,33 @@
 
 </head>
 
-<body onload="startChatUpdate()">
+<body onload="startChatUpdate(); focusOn(CHAT_WRITER)">
 <div class="container-fluid">
 	<div class="page-header">
-		<h2>CAWS <small>Chat on android web server</small> </h2>
+		<h3>CAWS <small>Chat on Android Web Server</small> </h3>
 	</div>
 	
 	<p></p>
 
-	<textarea id="msgViewer" rows="10" readonly="readonly" style="resize:none"></textarea>
+	<textarea class="field span3" id="msgViewer" rows="6" readonly="readonly" style="resize:none"></textarea>
 	<p></p>
-	<textarea id="msgToSend" rows="1" maxlength="200" style="resize:none"></textarea>
+
+
+	<div class="controls controls-row">
+		<input class="span2" type="text" id="msgToSend" placeholder="msg" maxlength="200" onkeydown="if (event.keyCode == 13){sendNewMessage()};"></input>
+		<button class="btn btn-primary span1" type="button" onclick="sendNewMessage()">Send</button>
+	</div>
+
+
 	<p></p>
 	<p>
-		<form class="form-inline">
-			<button class="btn btn-primary" type="button" onclick="request(null,'chat',sendNewChatMessage())">Send message</button>
-			<div class="input-prepend">
-				<span class="add-on">as</span>
-				<input class="span1" id="author" type="text" placeholder="Username" maxlength="20">
-			</div>
-		</form>
+		<div class="input-prepend">
+			<span class="add-on">as</span>
+			<input class="span1" id="author" type="text" placeholder="name" onkeydown="if (event.keyCode == 13) {focusOn(CHAT_WRITER)};" maxlength="7">
+		</div>
 	</p>
 </div>
-
+<!-- <textarea id="msgToSend" rows="1" maxlength="200" style="resize:none"></textarea> -->
 <script type="text/javascript">
 <!-- 
 CHAT_VIEWER = "msgViewer"
@@ -81,12 +85,16 @@ function request(callback, uri, messageToSend) {
 	xhr.send(JSON.stringify(messageToSend));
 }
 
-function sendNewChatMessage() {
-	var xhr = getXMLHttpRequest();
+function newChatMessageCommand() {
 	var msg = document.getElementById(CHAT_WRITER).value;
 	document.getElementById(CHAT_WRITER).value = "";
 	return { message:msg, command:"newMessage", 
 					author:document.getElementById(CHAT_AUTHOR).value }
+}
+
+function sendNewMessage(){
+	if (document.getElementById(CHAT_WRITER).value != "")
+		request(null,'chat',newChatMessageCommand());
 }
 
 function waitingChatUpdateCommand( _lastMsgId){
@@ -103,6 +111,14 @@ function updateChatViewer(oData) {
 
 function startChatUpdate(){
 		request(updateChatViewer,"chat",waitingChatUpdateCommand(-1));
+}
+
+function focusOn(id){
+	document.getElementById(id).focus();
+}
+
+function enterPressed(event){
+	return (event.keyCode == 13);
 }
 //-->
 </script>
