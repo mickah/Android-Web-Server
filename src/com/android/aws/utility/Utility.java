@@ -78,13 +78,10 @@ public class Utility {
 	public static String openAssetsString(Context context, String fileName){
 		InputStream is;
 		try {
-			//AppLog.logString("Loading File " + fileName.substring("assets/".length() + 1));
-			//AppLog.logString("Loading File 2" + context.getAssets().list(".")[0]);
 			is = context.getAssets().open( fileName.substring("assets/".length() + 1));
 			AppLog.logString("Loading File Done");
 			return Utility.convertStreamToString(is);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 			AppLog.logString("Loading File Fail");
 		}

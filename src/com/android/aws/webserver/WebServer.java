@@ -29,8 +29,6 @@ public class WebServer extends Thread {
 	private static final String SERVER_NAME = "AndWebServer";
 	private static final String ALL_PATTERN = "*";
 	private static final String CHAT_PATTERN = "/chat*";
-	private static final String MESSAGE_PATTERN = "/message*";
-	private static final String FOLDER_PATTERN = "/dir*";
 	private static final String ASSETS_PATTERN = "/assets*";
 	
 	private boolean isRunning = false;
@@ -68,8 +66,6 @@ public class WebServer extends Thread {
         registry = new HttpRequestHandlerRegistry();
         
         registry.register(ALL_PATTERN, new HomePageHandler(context));
-        registry.register(MESSAGE_PATTERN, new MessageCommandHandler(context, notifyManager));
-        registry.register(FOLDER_PATTERN, new FolderCommandHandler(context, serverPort));
         registry.register(CHAT_PATTERN, new ChatHandler(context));
         registry.register(ASSETS_PATTERN, new AssetsHandler(context));
         
