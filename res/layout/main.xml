@@ -4,10 +4,10 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent">
 
-	<LinearLayout
+<LinearLayout
 		android:orientation="vertical"
 		android:layout_width="fill_parent"
-    	android:layout_height="wrap_content"
+    	android:layout_height="0dp"
     	android:layout_weight="1.0"
     	android:padding="10dip">
     	
@@ -16,18 +16,14 @@
 	    	android:layout_height="wrap_content"
 	    	android:id="@+id/txtHeading"
 	    	android:text="@string/app_desc"
-	    	android:textColor="#FFFFFF"
-	    	android:textStyle="bold|italic"
+	    	android:textColor="@android:color/white"
+
+	    	android:textAppearance="?android:attr/textAppearanceMedium"
 	    	android:paddingTop="10dip"
 	    	android:paddingBottom="10dip"
 	    	android:gravity="left"/>
 	    	
-	    <TextView  
-	    	android:layout_width="fill_parent" 
-	    	android:layout_height="wrap_content"
-	    	android:id="@+id/txtInfo"
-	    	android:text="@string/app_info"
-	    	android:textColor="#FFFFFF"/>
+
 	    	
 	    <LinearLayout
 	    	android:orientation="vertical"
@@ -47,6 +43,7 @@
 	    <TextView  
 	    	android:layout_width="fill_parent" 
 	    	android:layout_height="wrap_content"
+	    	android:textAppearance="?android:attr/textAppearanceSmall"
 	    	android:id="@+id/txtLog"/>
 	    	
     </LinearLayout>
@@ -65,6 +62,6 @@
 		    android:text="@string/start_caption"
 		    android:paddingLeft="20dip"
 		    android:paddingRight="20dip"/>
-		    
+
 	</LinearLayout>
 </LinearLayout>

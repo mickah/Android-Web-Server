@@ -1,4 +1,4 @@
-package com.android.aws.webserver;
+package fr.fagno.android.caws.webserver;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -15,12 +15,13 @@ import org.apache.http.protocol.HttpRequestHandler;
 
 import android.content.Context;
 
-import com.android.aws.app.AppLog;
-import com.android.aws.utility.Utility;
+
+import fr.fagno.android.caws.app.AppLog;
+import fr.fagno.android.caws.utility.Utility;
 
 public class AssetsHandler implements HttpRequestHandler{
-private Context context = null;
-private String uri = new String();	
+	private Context context = null;
+	private String uri = new String();	
 	public AssetsHandler(Context context){
 		this.context = context;
 	}
@@ -31,24 +32,23 @@ private String uri = new String();
 		HttpEntity entity;
 		String contentType = "text/html";
 		uri = request.getRequestLine().getUri();
-		
+
 		if(uri.contains(".css"))
 			contentType = "text/css";
 		else if(uri.contains(".js"))
 			contentType = "application/x-javascript";
-				
+
 		entity = new EntityTemplate(new ContentProducer() {
-		public void writeTo(final OutputStream outstream) throws IOException {
-			OutputStreamWriter writer = new OutputStreamWriter(outstream, "UTF-8");
-			String resp = Utility.openAssetsString(context, uri);
-        
-			writer.write(resp);
-			writer.flush();
-		}
+			public void writeTo(final OutputStream outstream) throws IOException {
+				OutputStreamWriter writer = new OutputStreamWriter(outstream, "UTF-8");
+				String resp = Utility.openAssetsString(context, uri);
+				writer.write(resp);
+				writer.flush();
+			}
 		});
-		
+
 		((EntityTemplate)entity).setContentType(contentType);
 		response.setEntity(entity);
-		
+
 	}
 }

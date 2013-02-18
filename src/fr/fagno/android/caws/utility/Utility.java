@@ -1,4 +1,4 @@
-package com.android.aws.utility;
+package fr.fagno.android.caws.utility;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -13,28 +13,28 @@ import java.net.NetworkInterface;
 import java.net.SocketException;
 import java.util.Enumeration;
 
-import com.android.aws.app.AppLog;
+import fr.fagno.android.caws.app.AppLog;
 
 import android.content.Context;
 
 public class Utility {
 	public static String getLocalIpAddress() {
-        try {
-            for (Enumeration<NetworkInterface> en = NetworkInterface.getNetworkInterfaces(); en.hasMoreElements();) {
-                NetworkInterface intf = en.nextElement();
-                for (Enumeration<InetAddress> enumIpAddr = intf.getInetAddresses(); enumIpAddr.hasMoreElements();) {
-                    InetAddress inetAddress = enumIpAddr.nextElement();
-                    if (!inetAddress.isLoopbackAddress()) {
-                        return inetAddress.getHostAddress().toString();
-                    }
-                }
-            }
-        } catch (SocketException ex) {
-            ex.printStackTrace();
-        }
-        return null;
-    }
-	
+		try {
+			for (Enumeration<NetworkInterface> en = NetworkInterface.getNetworkInterfaces(); en.hasMoreElements();) {
+				NetworkInterface intf = en.nextElement();
+				for (Enumeration<InetAddress> enumIpAddr = intf.getInetAddresses(); enumIpAddr.hasMoreElements();) {
+					InetAddress inetAddress = enumIpAddr.nextElement();
+					if (!inetAddress.isLoopbackAddress()) {
+						return inetAddress.getHostAddress().toString();
+					}
+				}
+			}
+		} catch (SocketException ex) {
+			ex.printStackTrace();
+		}
+		return null;
+	}
+
 	public static String convertStreamToString(InputStream is) {
 		/*
 		 * To convert the InputStream to String we use the Reader.read(char[]
@@ -63,7 +63,7 @@ public class Utility {
 					e.printStackTrace();
 				}
 			}
-			
+
 			return writer.toString();
 		} else {
 			return "";
@@ -72,7 +72,7 @@ public class Utility {
 
 	public static String openHTMLString(Context context, int id){
 		InputStream is = context.getResources().openRawResource(id);
-		
+
 		return Utility.convertStreamToString(is);
 	}
 	public static String openAssetsString(Context context, String fileName){
