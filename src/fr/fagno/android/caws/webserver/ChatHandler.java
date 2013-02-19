@@ -55,6 +55,7 @@ public class ChatHandler implements HttpRequestHandler {
 						bodyResponse = getUpdate(mjsReceived.getInt("lastMsgId"));
 					}
 				}
+				response.setHeader("Content-Type", "text/plain; charset=UTF-8");
 				response.setEntity(new StringEntity(bodyResponse));
 				AppLog.logString("Respond Post: " + bodyResponse);
 
