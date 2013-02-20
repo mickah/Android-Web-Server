@@ -10,14 +10,18 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import fr.fagno.android.caws.R;
+import fr.fagno.android.caws.ads.Ads;
 import fr.fagno.android.caws.app.AppSettings;
 import fr.fagno.android.caws.constants.Constants;
 import fr.fagno.android.caws.service.HTTPService;
 import fr.fagno.android.caws.utility.Utility;
 
 public class CAWSActivity extends Activity {
+	private Ads ads = new Ads();//Class for manage ads (can be removed easily)
+	
 	private static final int PREFERENCE_REQUEST_CODE = 1001;
 
 	@Override
@@ -28,6 +32,8 @@ public class CAWSActivity extends Activity {
 		boolean isRunning = AppSettings.isServiceStarted(this);
 		setButtonText(isRunning);
 		setInfoText(isRunning);
+		
+		ads.OnCreateAds(this, (LinearLayout)findViewById(R.id.ad));
 	}
 
 	@Override
@@ -109,4 +115,10 @@ public class CAWSActivity extends Activity {
 			}
 		}
 	};
+	
+	@Override
+	  public void onDestroy() {
+	    ads.onDestroy();
+	    super.onDestroy();
+	  }
 }
