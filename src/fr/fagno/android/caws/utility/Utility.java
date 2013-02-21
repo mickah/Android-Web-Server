@@ -11,14 +11,21 @@ import java.io.Writer;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.net.SocketException;
+import java.util.Collections;
 import java.util.Enumeration;
+import java.util.List;
+
+import org.apache.http.conn.util.InetAddressUtils;
+
 
 import fr.fagno.android.caws.app.AppLog;
 
 import android.content.Context;
+import android.text.format.Formatter;
+import android.util.Log;
 
 public class Utility {
-	public static String getLocalIpAddress() {
+	/*public static String getLocalIpAddress() {
 		try {
 			for (Enumeration<NetworkInterface> en = NetworkInterface.getNetworkInterfaces(); en.hasMoreElements();) {
 				NetworkInterface intf = en.nextElement();
@@ -34,6 +41,57 @@ public class Utility {
 		}
 		return null;
 	}
+	
+	public static String getLocalIpAddress() {
+	    try {
+	        for (Enumeration<NetworkInterface> en = NetworkInterface.getNetworkInterfaces(); en.hasMoreElements();) {
+	            NetworkInterface intf = en.nextElement();
+	            for (Enumeration<InetAddress> enumIpAddr = intf.getInetAddresses(); enumIpAddr.hasMoreElements();) {
+	                InetAddress inetAddress = enumIpAddr.nextElement();
+	                if (!inetAddress.isLoopbackAddress()) {
+	                    String ip = Formatter.formatIpAddress(inetAddress.hashCode());
+	                    return ip;
+	                }
+	            }
+	        }
+	    } catch (SocketException ex) {
+	    	ex.printStackTrace();
+	    }
+	    return null;
+	}*/
+	
+	public static String getLocalIpAddress() {
+		return getLocalIpAddress(true);
+	}
+    /**
+     * Get IP address from first non-localhost interface
+     * @param ipv4  true=return ipv4, false=return ipv6
+     * @return  address or empty string
+     */
+    public static String getLocalIpAddress(boolean useIPv4) {
+        try {
+            List<NetworkInterface> interfaces = Collections.list(NetworkInterface.getNetworkInterfaces());
+            for (NetworkInterface intf : interfaces) {
+                List<InetAddress> addrs = Collections.list(intf.getInetAddresses());
+                for (InetAddress addr : addrs) {
+                    if (!addr.isLoopbackAddress()) {
+                        String sAddr = addr.getHostAddress().toUpperCase();
+                        boolean isIPv4 = InetAddressUtils.isIPv4Address(sAddr); 
+                        if (useIPv4) {
+                            if (isIPv4) 
+                                return sAddr;
+                        } else {
+                            if (!isIPv4) {
+                                int delim = sAddr.indexOf('%'); // drop ip6 port suffix
+                                return delim<0 ? sAddr : sAddr.substring(0, delim);
+                            }
+                        }
+                    }
+                }
+            }
+        } catch (Exception ex) { } // for now eat exceptions
+        return "";
+    }
 
 	public static String convertStreamToString(InputStream is) {
 		/*
