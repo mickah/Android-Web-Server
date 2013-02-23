@@ -12,6 +12,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 import fr.fagno.android.caws.R;
 import fr.fagno.android.caws.ads.Ads;
 import fr.fagno.android.caws.app.AppSettings;
@@ -21,6 +22,7 @@ import fr.fagno.android.caws.utility.Utility;
 
 public class CAWSActivity extends Activity {
 	private Ads ads = new Ads();//Class for manage ads (can be removed easily)
+	private Toast toast;
 	
 	private static final int PREFERENCE_REQUEST_CODE = 1001;
 
@@ -32,8 +34,8 @@ public class CAWSActivity extends Activity {
 		boolean isRunning = AppSettings.isServiceStarted(this);
 		setButtonText(isRunning);
 		setInfoText(isRunning);
-		
 		ads.OnCreateAds(this, (LinearLayout)findViewById(R.id.ad));
+		toast = new Toast(this);
 	}
 
 	@Override
@@ -85,7 +87,7 @@ public class CAWSActivity extends Activity {
 
 		if(isServiceRunning){
 			SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(this);
-			text = getString(R.string.log_running) + "\nhttp://" + Utility.getLocalIpAddress() + ":" + pref.getString(Constants.PREF_SERVER_PORT, "" + Constants.DEFAULT_SERVER_PORT);
+			text = getString(R.string.log_running) + "\n" + getString(R.string.log_msg1) + " 'http://" + Utility.getLocalIpAddress() + ":" + pref.getString(Constants.PREF_SERVER_PORT, "" + Constants.DEFAULT_SERVER_PORT) + "' " + getString(R.string.log_msg2);
 		}
 		txtLog.setText(text);
 	}
@@ -105,10 +107,17 @@ public class CAWSActivity extends Activity {
 					setInfoText(false);
 				}
 				else{
-					startService(intent);
-					AppSettings.setServiceStarted(CAWSActivity.this, true);
-					setButtonText(true);
-					setInfoText(true);
+					SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+					int serverPort = Integer.parseInt(pref.getString(Constants.PREF_SERVER_PORT, "" + Constants.DEFAULT_SERVER_PORT));
+					if(Utility.available(serverPort)){
+						startService(intent);
+						AppSettings.setServiceStarted(CAWSActivity.this, true);
+						setButtonText(true);
+						setInfoText(true);
+					}else{
+						toast = Toast.makeText(getApplicationContext(), "Port " + serverPort + " already in use!", Toast.LENGTH_LONG);
+						toast.show();
+					}
 				}
 				break;
 			}

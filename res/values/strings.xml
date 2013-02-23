@@ -19,4 +19,6 @@
 	<string name="pref_serverport_summary">Enter server port</string>
 	<string name="log_running">caws is running...</string>
 	<string name="log_notrunning">caws is stopped...</string>
+	<string name="log_msg1">To connect to the chat, enter:</string> 
+	<string name="log_msg2">in a browser (chrome, firefox ...)</string>
 </resources>

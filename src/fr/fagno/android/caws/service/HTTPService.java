@@ -1,15 +1,14 @@
 package fr.fagno.android.caws.service;
 
-import fr.fagno.android.caws.webserver.WebServer;
-import fr.fagno.android.caws.ui.CAWSActivity;
-import fr.fagno.android.caws.R;
-
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Intent;
 import android.os.IBinder;
+import fr.fagno.android.caws.R;
+import fr.fagno.android.caws.ui.CAWSActivity;
+import fr.fagno.android.caws.webserver.WebServer;
 
 public class HTTPService extends Service {
 	private static final int NOTIFICATION_STARTED_ID = 1;
@@ -26,7 +25,8 @@ public class HTTPService extends Service {
 
 	@Override
 	public void onDestroy() {
-		server.stopThread();
+		if(server!=null)
+			server.stopThread();
 		notifyManager.cancel(NOTIFICATION_STARTED_ID);
 		notifyManager = null;
 		super.onDestroy();
@@ -42,12 +42,13 @@ public class HTTPService extends Service {
 	@Override
 	public boolean onUnbind(Intent intent) {
 		return super.onUnbind(intent);
+
 	}
 
 	@Override
-	public IBinder onBind(Intent intent) {
-		return null;
-	}
+    public IBinder onBind(Intent intent) {
+        return null;
+    }
 
 	private void showNotification(){
 		String text = getString(R.string.service_started);

@@ -8,21 +8,17 @@ import java.io.Reader;
 import java.io.StringWriter;
 import java.io.UnsupportedEncodingException;
 import java.io.Writer;
+import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
-import java.net.SocketException;
+import java.net.ServerSocket;
 import java.util.Collections;
-import java.util.Enumeration;
 import java.util.List;
 
 import org.apache.http.conn.util.InetAddressUtils;
 
-
-import fr.fagno.android.caws.app.AppLog;
-
 import android.content.Context;
-import android.text.format.Formatter;
-import android.util.Log;
+import fr.fagno.android.caws.app.AppLog;
 
 public class Utility {
 	/*public static String getLocalIpAddress() {
@@ -144,5 +140,41 @@ public class Utility {
 			AppLog.logString("Loading File Fail");
 		}
 		return "Not Found";
+	}
+	
+	/**
+	 * Checks to see if a specific port is available.
+	 *
+	 * @param port the port to check for availability
+	 */
+	public static boolean available(int port) {
+	    if (port < 1 || port > 65535) {
+	        return false;//throw new IllegalArgumentException("Invalid start port: " + port);
+	    }
+
+	    ServerSocket ss = null;
+	    DatagramSocket ds = null;
+	    try {
+	        ss = new ServerSocket(port);
+	        ss.setReuseAddress(true);
+	        /*ds = new DatagramSocket(port);
+	        ds.setReuseAddress(true);*/// UDP
+	        return true;
+	    } catch (IOException e) {
+	    } finally {
+	        if (ds != null) {
+	            ds.close();
+	        }
+
+	        if (ss != null) {
+	            try {
+	                ss.close();
+	            } catch (IOException e) {
+	                /* should not be thrown */
+	            }
+	        }
+	    }
+
+	    return false;
 	}
 }

@@ -13,7 +13,7 @@ import fr.fagno.android.caws.app.AppLog;
 
 public class Ads implements AdListener{
 	public final static Boolean AD_ACTIVATED = false;
-	public final static String ID = "0";
+	public final static String ID = "";
 	private AdView adView = null;
 	Activity act;
 	

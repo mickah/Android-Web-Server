@@ -78,6 +78,8 @@ public class ChatHandler implements HttpRequestHandler {
 
 			if(counter - MAX_MESSAGES_SAVED > 0)
 				Lastmessages.delete(counter - MAX_MESSAGES_SAVED);
+			if(author.equals(""))
+				author = "Unknown";
 			Lastmessages.put(counter, author + ": " + message);
 
 			// Release all handler waiting a message

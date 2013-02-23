@@ -21,8 +21,9 @@ import org.apache.http.protocol.ResponseServer;
 import android.app.NotificationManager;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.os.Looper;
 import android.preference.PreferenceManager;
-
+import fr.fagno.android.caws.app.AppLog;
 import fr.fagno.android.caws.constants.Constants;
 
 public class WebServer extends Thread {
@@ -40,6 +41,8 @@ public class WebServer extends Thread {
 	private HttpService httpService = null;
 	private HttpRequestHandlerRegistry registry = null;
 	private NotificationManager notifyManager = null;
+
+	private ServerSocket serverSocket;
 
 	public WebServer(Context context, NotificationManager notifyManager){
 		super(SERVER_NAME);
@@ -72,24 +75,26 @@ public class WebServer extends Thread {
 	@Override
 	public void run() {
 		super.run();
+		Looper.prepare();
 
-		try {
-			ServerSocket serverSocket = new ServerSocket(serverPort);
+		try {		
+			serverSocket = new ServerSocket(serverPort);
 			serverSocket.setReuseAddress(true);
 
+			AppLog.logString("Webserver: open");
 			while(isRunning){
 				try {
 					final Socket socket = serverSocket.accept();
-
 					Thread proceedRequest = new Thread(){
 						@Override
 						public void run() {
-
 							DefaultHttpServerConnection serverConnection = new DefaultHttpServerConnection();				        	
 							try {
+								AppLog.logString("Webserver: bind");
 								serverConnection.bind(socket, new BasicHttpParams());
 								httpService.handleRequest(serverConnection, httpContext);
 								serverConnection.shutdown();
+								AppLog.logString("Webserver: shutdown");
 							} catch (IOException e) {
 								e.printStackTrace();
 							}
@@ -101,14 +106,18 @@ public class WebServer extends Thread {
 					proceedRequest.start();
 				} catch (IOException e) {
 					e.printStackTrace();
+					AppLog.logString("Webserver: error thread");
 				} 
 			}
-
 			serverSocket.close();
+			AppLog.logString("Webserver: close");
 		} 
 		catch (IOException e) {
 			e.printStackTrace();
+			AppLog.logString("Webserver: error socket");
 		}
+
+		Looper.loop();
 	}
 
 	public synchronized void startThread() {
@@ -118,6 +127,12 @@ public class WebServer extends Thread {
 
 	public synchronized void stopThread(){
 		isRunning = false;
+		try {
+			serverSocket.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
 	}
 
 	public void setNotifyManager(NotificationManager notifyManager) {

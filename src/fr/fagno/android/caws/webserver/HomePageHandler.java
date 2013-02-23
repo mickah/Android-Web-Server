@@ -43,5 +43,6 @@ public class HomePageHandler implements HttpRequestHandler {
 		});
 		((EntityTemplate)entity).setContentType(contentType);
 		response.setEntity(entity);
+		AppLog.logString("HomePageHandling: end");
 	}
 }
